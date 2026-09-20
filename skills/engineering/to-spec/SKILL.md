@@ -16,7 +16,7 @@ The issue tracker and triage label vocabulary should have been provided to you. 
 
 Check with the user that these seams match their expectations.
 
-3. Write the spec using the template below, then publish it to the project issue tracker. Apply the `ready-for-agent` triage label - no need for additional triage.
+3. Write the spec using the template below, then publish it to the project issue tracker. Apply the `ready-for-agent` triage label - no need for additional triage. The label means no further triage is needed, not "build this in one run": if the spec is later split by `/to-tickets`, that skill gates it behind its tickets so an AFK runner working the frontier leaves the spec alone until they land.
 
 <spec-template>
 

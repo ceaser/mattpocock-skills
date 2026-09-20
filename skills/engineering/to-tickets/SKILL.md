@@ -64,7 +64,7 @@ Publish the approved tickets. **How** depends on the tracker `/setup-matt-pocock
 
 Work the **frontier**: any ticket whose blockers are all done. For a purely linear chain that means top to bottom.
 
-Do NOT close or modify any parent issue.
+Do NOT close the parent issue, re-label it, or rewrite its body. Step 6 is the only change you make to it.
 
 <local-ticket-template>
 
@@ -103,3 +103,12 @@ The end-to-end behaviour this ticket makes work, from the user's perspective, no
 </issue-template>
 
 In either form, avoid specific file paths or code snippets: they go stale fast. Exception: if a prototype produced a snippet that encodes a decision more precisely than prose can (state machine, reducer, schema, type shape), inline it and note briefly that it came from a prototype. Trim to the decision-rich parts, not a working demo, just the important bits.
+
+### 6. Gate the parent behind its tickets
+
+Where the tickets came from a parent spec or issue, make that parent **blocked by every ticket you just published**.
+
+- **Local files** → add a `Blocked by: 01, 02, …` line near the top of the spec file, listing every ticket, so the scan that works the tickets skips the spec.
+- **A real issue tracker** → use the native blocking relationship. On GitHub each ticket can carry it at creation (`gh issue create --parent <spec> --blocking <spec>`), or it can be wired afterwards (`gh issue edit <spec> --add-blocked-by <n>`). Only where a tracker genuinely has no blocking edge, append a "Blocked by" list to the parent's body instead.
+
+The parent keeps its `ready-for-agent` label. It is still fully specified, and the blocking edges, not the label, are what say "not yet". That is what stops an AFK runner grabbing the spec and trying to build the whole thing in one run: a runner works the frontier, and the parent is off the frontier until its last ticket closes. It then resurfaces as the integrate-and-close ticket.

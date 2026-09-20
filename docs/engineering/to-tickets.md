@@ -41,6 +41,8 @@ The edges are the point of the artifact. They read two ways depending on the tra
 
 The edges live in the ticket either way. The medium only decides whether anything can act on them in parallel. `to-tickets` produces the artifact; running it (one session at a time, or a fleet) is your job, not the skill's.
 
+One edge points the other way. Once the tickets are published, `to-tickets` makes the parent spec **blocked by every one of them** and otherwise leaves it untouched: same label, same body. Stripping the spec's `ready-for-agent` label would be a lie, because the spec is fully specified; putting it behind its own tickets is not. A fleet working the frontier skips it for as long as the build is in flight, and it comes back as the integrate-and-close ticket once the last child lands.
+
 ## The wide-refactor exception
 
 One shape breaks the tracer-bullet rule. A **wide refactor** is a single mechanical change (rename a column, retype a shared symbol) whose **blast radius** fans across the whole codebase, so one edit breaks thousands of call sites and no vertical slice can land green.
@@ -62,7 +64,7 @@ Over-decomposition is the most reported friction on this skill, and it is consis
 This is the failure the vertical-slice rule is written against, and the skill still produces it sometimes. Catch it at the quiz step by asking one question per ticket: what can I demo when this is done? A ticket with no answer is a horizontal slice. Some people add a "demo path" line to each ticket for this reason, and report it nudges the model toward vertical decomposition.
 
 **On GitHub the tickets weren't created as sub-issues of the spec issue.**
-Known and unfixed. It has been reported across a dozen runs and several models, [most fully in issue #554](https://github.com/mattpocock/skills/issues/554), and it is worse on Codex than on Claude. `gh` has supported this natively since v2.94: `gh issue create --parent <n>`, and `gh issue edit <parent> --add-sub-issue <n>` after the fact. Until the tracker template prefers those, wiring the parent links yourself after a run is the reliable move.
+Long-standing. It has been reported across a dozen runs and several models, [most fully in issue #554](https://github.com/mattpocock/skills/issues/554), and it is worse on Codex than on Claude. `gh` has supported this natively since v2.94: `gh issue create --parent <n>`, and `gh issue edit <parent> --add-sub-issue <n>` after the fact. The publish step now names those flags rather than leaving the agent to find them, but naming a flag and using it are two different things, so glancing at the parent links after a run is still cheap insurance.
 
 **"Blocked by" was written into the issue body instead of a real blocking link.**
 Same class of problem, [reported in issue #513](https://github.com/mattpocock/skills/issues/513), where the agent went as far as asserting GitHub has no native blocking relationship at all. It does: `gh issue create --blocked-by 12,15`. Because blockers are published first, their numbers are always available at creation time. The body text is meant to be the fallback for trackers with no native edge, not the default.
@@ -76,6 +78,9 @@ A very large spec can outgrow what a tracker issue serves back cleanly, and ther
 **The acceptance criteria graded nothing: some passed before any work was done.**
 The template asks for criteria and says nothing about whether they can fail, so this happens. Three shapes recur: a criterion already true at the base commit, a criterion that can only be satisfied by work another ticket owns, and one that restates the request rather than deriving from the artifact. Vertical slicing prevents most of it (a slice that delivers behaviour which didn't exist before is red at the base commit by construction), but the check is worth doing by hand. For each criterion, name the observation that would show it false, and confirm it fails at the commit the implementer starts from.
 
+**My AFK runner grabbed the parent spec and tried to build the whole feature in one run.**
+That was the most-reported rough edge on [to-spec](https://aihero.dev/skills-to-spec), and the fix lives here rather than there: the publish step gates the parent behind its children, so it leaves the frontier for as long as the build is in flight. The label was never the queue; the blocking edges are. A runner that selects on a raw `ready-for-agent` label query will still pick the spec up, so select on "blockers all closed" instead, which fixes gated parent specs and blocked tickets in one move.
+
 **The tickets are published. How do I actually run them?**
 The skill stops at the artifact, and there is no auto-dispatch mode. Dispatch is manual: look at the board, count the tickets with no open blockers, and open that many agent sessions. One ticket per fresh context, cleared between them. Be aware that [implement](https://aihero.dev/skills-implement) does not reliably close or check off the ticket when it finishes, on GitHub or in local markdown, so the ticket's state is yours to update.
 
@@ -84,6 +89,7 @@ The skill stops at the artifact, and there is no auto-dispatch mode. Dispatch is
 - Every ticket has an answer to "what can I demo when this is done?", and the answer is behaviour, not a layer.
 - The list comes back to you numbered, with a "Blocked by" line on each, before anything is published.
 - The ticket at the top has no blockers and can be started immediately.
+- The parent spec sits blocked behind its tickets instead of appearing on the frontier beside them.
 - Nothing in a ticket body is a file path or a line number, except a snippet a prototype produced.
 - Each ticket reads like something a fresh session could finish without you in the room.
 - Prefactoring, where it found any, is at the front of the order rather than mixed into feature tickets.
