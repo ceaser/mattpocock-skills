@@ -41,7 +41,7 @@ The edges are the point of the artifact. They read two ways depending on the tra
 
 The edges live in the ticket either way. The medium only decides whether anything can act on them in parallel. `to-tickets` produces the artifact; running it (one session at a time, or a fleet) is your job, not the skill's.
 
-One edge points the other way. Once the tickets are published, `to-tickets` makes the parent spec **blocked by every one of them** and otherwise leaves it untouched: same label, same body. Stripping the spec's `ready-for-agent` label would be a lie, because the spec is fully specified; putting it behind its own tickets is not. A fleet working the frontier skips it for as long as the build is in flight, and it comes back as the integrate-and-close ticket once the last child lands.
+One edge points the other way. Once the tickets are published, `to-tickets` makes the parent spec **blocked by every one of them** and otherwise leaves it untouched: same label, same body. A fleet working the frontier skips it for as long as the build is in flight, and it comes back as the integrate-and-close ticket once the last child lands. Not every tracker allows that edge (beads refuses to let a task block an epic), and where it is refused the parent's `ready-for-agent` label comes off for the duration instead. Which of the two applies is a property of your tracker, so it lives in the repo's issue-tracker doc rather than in the skill.
 
 ## The wide-refactor exception
 

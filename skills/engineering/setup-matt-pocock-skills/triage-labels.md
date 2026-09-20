@@ -12,6 +12,6 @@ The skills speak in terms of five canonical triage roles. This file maps those r
 
 When a skill mentions a role (e.g. "apply the AFK-ready triage label"), use the corresponding label string from this table.
 
-`ready-for-agent` is a readiness state, not a queue. It says the issue is fully specified, not that it is workable right now: a parent spec keeps the label while `to-tickets` holds it blocked behind its tickets. An AFK runner should therefore grab from the **frontier** (issues carrying the label whose blockers are all closed) rather than from a raw label query, or it will pick up a spec and try to build the whole thing in one run.
+`ready-for-agent` is a readiness state, not a queue. It says the issue is fully specified, not that it is workable right now: a parent spec keeps the label while `to-tickets` holds it blocked behind its tickets, unless the tracker refuses that edge, in which case the label comes off for the duration instead. Which applies is recorded in `issue-tracker.md`. An AFK runner should therefore grab from the **frontier** (issues carrying the label whose blockers are all closed) rather than from a raw label query, or it will pick up a spec and try to build the whole thing in one run.
 
 Edit the right-hand column to match whatever vocabulary you actually use.
