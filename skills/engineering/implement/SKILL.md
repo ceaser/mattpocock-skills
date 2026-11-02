@@ -14,6 +14,6 @@ Call the Skill tool with "tdd" where possible, at pre-agreed seams.
 
 Run the project's fast static checks (type checker, compiler, or linter, whichever the project has) regularly, single test files regularly, and the full test suite once at the end.
 
-Once done, call the Skill tool with "code-review" to review the work.
+Once done, commit your work to the current branch, then call the Skill tool with "code-review", using the commit the branch started from as the fixed point. The review diffs commits only, so the work is committed first.
 
-Commit your work to the current branch.
+Commit fixes from the review as follow-up commits on the same branch.
