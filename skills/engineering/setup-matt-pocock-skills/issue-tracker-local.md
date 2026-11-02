@@ -19,6 +19,10 @@ Create a new file under `.scratch/<feature-slug>/` (creating the directory if ne
 
 Read the file at the referenced path. The user will normally pass the path or the issue number directly.
 
+## When a skill says "read the parent spec"
+
+Read `.scratch/<feature-slug>/spec.md` once, scoped to the sections the ticket cites: list its headings with `grep -n '^#' spec.md`, then read only the cited line ranges. Do not read the whole file when the ticket names its sections.
+
 ## Wayfinding operations
 
 Used by `/wayfinder`. The **map** is a file with one **child** file per ticket.

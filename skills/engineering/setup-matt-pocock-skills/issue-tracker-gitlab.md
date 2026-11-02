@@ -32,7 +32,11 @@ Create a GitLab issue.
 
 ## When a skill says "fetch the relevant ticket"
 
-Run `glab issue view <number> --comments`.
+Run `glab issue view <number> --comments -F json`. Keep the JSON output: the rendered view wraps and truncates tables.
+
+## When a skill says "read the parent spec"
+
+Read the parent once, scoped to the sections the ticket cites. Pull the description on its own with `glab issue view <number> -F json | jq -r .description`, then keep only the cited headings, for example `awk '/^## /{p=/^## <heading>/} p'` for one section. Do not dump the whole description into context, and do not view it in plain text: a large spec read whole costs more than the ticket itself, and its tables arrive wrapped.
 
 ## Wayfinding operations
 

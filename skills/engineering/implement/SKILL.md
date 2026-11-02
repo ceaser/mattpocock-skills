@@ -6,7 +6,9 @@ disable-model-invocation: true
 
 Implement the work described by the user in the spec or tickets.
 
-If the user passes a ticket reference, fetch it from the issue tracker and state its title before starting. If the reference is ambiguous, ask.
+The issue tracker should have been provided to you. If not, tell the user to run `/setup-matt-pocock-skills`.
+
+If the user passes a ticket reference, fetch the relevant ticket the way the tracker doc says and state its title before starting. If the reference is ambiguous, ask. When the ticket cites a parent spec (an epic, a parent issue, a spec file), read the parent spec the way the tracker doc says: once, scoped to the sections the ticket cites, never the whole document.
 
 Call the Skill tool with "tdd" where possible, at pre-agreed seams.
 

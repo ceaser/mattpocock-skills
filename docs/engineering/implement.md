@@ -26,13 +26,13 @@ The same-session case is worth naming because the skill's own first line doesn't
 
 `implement` commits to the branch you are on. It does not create one, and it does not ask. Check you are on the branch you want the work on before you start.
 
-If the tickets came from [to-tickets](https://aihero.dev/skills-to-tickets), [setup-matt-pocock-skills](https://aihero.dev/skills-setup-matt-pocock-skills) configured the tracker they live on. `code-review` reads the same configuration to find the originating spec at close-out.
+If the tickets came from [to-tickets](https://aihero.dev/skills-to-tickets), [setup-matt-pocock-skills](https://aihero.dev/skills-setup-matt-pocock-skills) configured the tracker they live on. `implement` fetches the ticket the way that configuration says, and reads a parent spec (an epic, a parent issue) only for the sections the ticket cites. `code-review` reads the same configuration to find the originating spec at close-out.
 
 ## What one run does
 
 A run has five steps, in order:
 
-1. Read the ticket or spec and work out the seams.
+1. Fetch the ticket or spec through the configured tracker and work out the seams.
 2. Drive [tdd](https://aihero.dev/skills-tdd) at the pre-agreed seams, one red-green slice at a time.
 3. Typecheck often, run single test files as it goes.
 4. Run the full test suite once, at the end.
@@ -74,9 +74,14 @@ Probably not. The ticket is more likely too big. A run does codebase exploration
 
 The agent resolved `#2` against another numbered list in context, such as a todo file or checklist, rather than the configured tracker. `implement` now fetches a passed reference from the issue tracker and states its title before starting, and asks when the reference is ambiguous. Check that title matches the ticket you meant; passing the issue URL or `owner/repo#2` removes the ambiguity entirely.
 
+**Its first call dumped the whole parent epic in plain text, tables wrapped and truncated, then read it again as JSON.**
+
+The fetch command is not the skill's to choose. `implement` says "fetch the relevant ticket" and "read the parent spec", and `docs/agents/issue-tracker.md` supplies the command for each, so the fix lives in that file. The templates `setup-matt-pocock-skills` ships now use machine-readable output for the fetch and read the parent once, scoped to the headings the ticket cites. If your tracker doc predates that, or you wrote it by hand for an "other" tracker such as Beads, add the two entries yourself with the JSON form of your tracker's read command (`bd show <id> --json` for Beads) and a scoped read of the parent. Re-running setup refreshes the shipped templates; a hand-written doc you edit directly.
+
 ## It's working if
 
 - The session opens by reading the ticket or spec and restating what it will build, rather than asking you what to build.
+- The first fetch in the trace is your tracker doc's read command, and a parent spec is read once for the sections the ticket cites, not pasted whole.
 - You can see an actual `tdd` Skill tool call in the trace, not just tests appearing in the diff.
 - Typechecks and single test files run repeatedly during the run, and the full suite runs once near the end.
 - The run reaches a commit on your current branch without you prompting it to carry on.

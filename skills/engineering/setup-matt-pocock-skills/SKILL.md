@@ -113,7 +113,7 @@ Then write the docs files using the seed templates in this skill folder as a sta
 - [triage-labels.md](./triage-labels.md): label mapping (only if `triage` is installed)
 - [domain.md](./domain.md): domain doc consumer rules + layout
 
-For "other" issue trackers, write `docs/agents/issue-tracker.md` from scratch using the user's description.
+For "other" issue trackers, write `docs/agents/issue-tracker.md` from scratch using the user's description. It must carry the same operation headings the templates do (`When a skill says "publish to the issue tracker"`, `"fetch the relevant ticket"`, `"read the parent spec"`, and the wayfinding operations), each with a concrete command or procedure for that tracker: the downstream skills look those headings up by name. For the fetch and parent-spec entries, use the tracker's machine-readable output (JSON, a raw body field) rather than its rendered view, which wraps and truncates tables, and scope the parent read to the sections a ticket cites.
 
 ### 5. Done
 

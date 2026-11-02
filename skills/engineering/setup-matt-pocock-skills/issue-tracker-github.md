@@ -36,7 +36,11 @@ Create a GitHub issue.
 
 ## When a skill says "fetch the relevant ticket"
 
-Read it as in **Read an issue** above.
+Read it as in **Read an issue** above. Keep the `--json` output: the rendered view wraps and truncates tables.
+
+## When a skill says "read the parent spec"
+
+Read the parent once, scoped to the sections the ticket cites. Pull the body on its own with `gh issue view <number> --json body --jq .body`, then keep only the cited headings, for example `awk '/^## /{p=/^## <heading>/} p'` for one section. Do not dump the whole body into context, and do not view it in plain text: a large spec read whole costs more than the ticket itself, and its tables arrive wrapped.
 
 ## Wayfinding operations
 
