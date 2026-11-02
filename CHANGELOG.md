@@ -1,5 +1,19 @@
 # mattpocock-skills
 
+## 1.3.3
+
+### Patch Changes
+
+- [#1363](https://github.com/mattpocock/skills/pull/1363) [`5ae4816`](https://github.com/mattpocock/skills/commit/5ae481693d13b37d4d2c2c92d0b66d299c93e695) Thanks [@mattpocock](https://github.com/mattpocock)! - `chief-of-staff` now looks for a shared wiki before starting its own. It also runs `retro` on about one in five of its subagents' sessions, the ones where something went wrong first, and acts on the findings itself, and runs `to-spec`, `to-tickets` and `implement-spec` for large chunks of work, reading each skill by relative path so they can stay user-invoked.
+
+- [`ae48e54`](https://github.com/mattpocock/skills/commit/ae48e54cd1a9232605c3f123dbfcb5fa462c7339) Thanks [@ceaser](https://github.com/ceaser)! - to-tickets: gate the parent spec behind the tickets it publishes. After publishing, the parent is made blocked by every ticket, using the tracker's native blocking edge (on GitHub, `gh issue create --parent <spec> --blocking <spec>`, or `gh issue edit <spec> --add-blocked-by <n>` after the fact) and a `Blocked by:` line in local mode. The parent keeps its `ready-for-agent` label, because it is still fully specified; what says "not yet" is the edge, not the label. This closes the most-reported rough edge on `to-spec`, where an AFK runner polling for `ready-for-agent` grabbed the parent spec and tried to build the whole feature in one run instead of working the ticket slices. `to-spec` now says what the label does and does not mean, and the `triage-labels.md` seed tells runners to grab from the frontier (blockers all closed) rather than from a raw label query. Where a tracker refuses to let a ticket block its own parent (beads rejects a `blocks` edge between an epic and a task in either direction), the parent's `ready-for-agent` label comes off for the duration instead; the step defers to the repo's issue-tracker doc for which applies.
+
+- [`1525ef9`](https://github.com/mattpocock/skills/commit/1525ef98a53dcc02ad6d82d0c361b05dec643c0c) Thanks [@ceaser](https://github.com/ceaser)! - `implement` now fetches a ticket and reads its parent spec the way the repo's `docs/agents/issue-tracker.md` says, instead of choosing the command itself. The tracker templates `setup-matt-pocock-skills` ships gain a `When a skill says "read the parent spec"` entry that reads the parent once, scoped to the sections the ticket cites, using machine-readable output so tables are not wrapped or truncated; hand-written "other" tracker docs are asked to carry the same headings. Re-run `/setup-matt-pocock-skills` to refresh a shipped template, or add the entry to a hand-written doc.
+
+- [#1342](https://github.com/mattpocock/skills/pull/1342) [`a496f55`](https://github.com/mattpocock/skills/commit/a496f5513d4a4cf889bc48e189e579f4b0bdf6aa) Thanks [@mattpocock](https://github.com/mattpocock)! - `implement-spec` now uses a fresh implementer subagent for each ticket and for the code-review fixes, instead of reusing an earlier implementer.
+
+- [#1316](https://github.com/mattpocock/skills/pull/1316) [`4ae2317`](https://github.com/mattpocock/skills/commit/4ae2317ddb22b046e26455e4f9c9b3aaaf62212d) Thanks [@mattpocock](https://github.com/mattpocock)! - Add `software-factory`, an in-progress user-invoked reference skill: a glossary for designing a software factory (tasks, runs, runners, triggers, and the services they plug into), example tasks grouped by the problem they solve, surveys of the products that fill each slot (ticket trackers, git hosts, runners, observability platforms), and the questions that finish a design. Call it alongside a grilling session.
+
 ## 1.3.2
 
 ### Patch Changes
